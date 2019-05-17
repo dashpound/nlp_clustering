@@ -1,12 +1,16 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun May 12 20:15:05 2019
+# =============================================================================
+# 
+# =============================================================================
+#
+#
+#
+#
+#
+#
+# =============================================================================
+# packages required to run code.  Make sure to install all required packages.
+# =============================================================================
 
-@author: phuynh
-"""
-###############################################################################
-### packages required to run code.  Make sure to install all required packages.
-###############################################################################
 import re,string
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
@@ -31,36 +35,38 @@ import numpy as np
 
 import json_lines
 
-os.chdir(r'C:\Users\phuynh\Documents\NU\2019 Spring\453_Miller\Reuters')
+os.chdir(r'C:\Users\johnk\Desktop\Grad School\6. Spring 2019\1. MSDS_453_NLP\6. Homework\week7\economics\econ\files')
 
 RANDOM_SEED=9999
-###############################################################################
-### read train and test dataframe.  Headers are ['category', 'corpus', 'dataset', 'filename', 'text']
-###############################################################################
-category={'category':[]}
+
+#%%
+# =============================================================================
+# read train and test dataframe.  Headers are ['category', 'corpus', 'dataset', 'filename', 'text']
+# =============================================================================
+
+labels={'labels':[]}
 text={'text':[]}
 dataset={'dataset':[]}
-filename={'filename':[]}
+title={'title':[]}
 
 
-with open('reuters_train.jl', 'rb') as f:
+with open('all.jsonl', 'rb') as f:
     for item in json_lines.reader(f):
-        category['category'].append(item['category'])
+        labels['labels'].append(item['labels'])
         text['text'].append(item['text'])
-        filename['filename'].append(item['filename'])
+        title['title'].append(item['title'])
 
-data=pd.concat([pd.DataFrame(category),pd.DataFrame(text),pd.DataFrame(dataset),
-                pd.DataFrame(filename)], axis=1)
+data=pd.concat([pd.DataFrame(labels),pd.DataFrame(text),pd.DataFrame(dataset),
+                pd.DataFrame(title)], axis=1)
 
 #for purpose of demo number of document selected was 1k.    
-data=data.sample(n=1000, replace=False, random_state =RANDOM_SEED)
+data=data.sample(n=10, replace=False, random_state =RANDOM_SEED)
 data=data.reset_index()
+#%%
+# =============================================================================
+# Function to process documents
+# =============================================================================
 
-
-
-###############################################################################
-### Function to process documents
-###############################################################################
 def clean_doc(doc): 
     #split document into individual words
     tokens=doc.split()
@@ -81,20 +87,20 @@ def clean_doc(doc):
     # tokens=[ps.stem(word) for word in tokens]
     return tokens
 
-
-
-
-###############################################################################
-### Processing text into lists
-###############################################################################
+#%%
+# =============================================================================
+# Processing text into lists
+# =============================================================================
 
 #create empty list to store text documents titles
 titles=[]
 
 #for loop which appends the DSI title to the titles list
 for i in range(0,len(data)):
-    temp_text=data['filename'].iloc[i]
+    temp_text=data['title'].iloc[i]
     titles.append(temp_text)
+
+#%%
 
 #create empty list to store text documents
 text_body=[]
@@ -104,7 +110,7 @@ for i in range(0,len(data)):
     temp_text=data['text'].iloc[i]
     text_body.append(temp_text)
 
-    
+#%%    
 #empty list to store processed documents
 processed_text=[]
 #for loop to process the text to the processed_text list
@@ -114,7 +120,7 @@ for i in text_body:
 
 #Note: the processed_text is the PROCESSED list of documents read directly form 
 #the csv.  Note the list of words is separated by commas.
-
+#%%
 
 #stitch back together individual words to reform body of text
 final_processed_text=[]
@@ -129,10 +135,11 @@ for i in processed_text:
 #(1) text_body - unused, (2) processed_text (used in W2V), 
 #(3) final_processed_text (used in TFIDF), and (4) DSI titles (used in TFIDF Matrix)
 
+#%%
+# =============================================================================
+# Sklearn TFIDF 
+# =============================================================================
 
-###############################################################################
-### Sklearn TFIDF 
-###############################################################################
 #note the ngram_range will allow you to include multiple words within the TFIDF matrix
 #Call Tfidf Vectorizer
 Tfidf=TfidfVectorizer(ngram_range=(1,1))
@@ -146,10 +153,11 @@ TFIDF_matrix=Tfidf.fit_transform(final_processed_text)
 matrix=pd.DataFrame(TFIDF_matrix.toarray(), columns=Tfidf.get_feature_names(), index=titles)
 
 
-
-###############################################################################
-### Doc2Vec
-###############################################################################
+#%%
+# =============================================================================
+# Doc2Vec
+# =============================================================================
+ 
 documents = [TaggedDocument(doc, [i]) for i, doc in enumerate(final_processed_text)]
 model = Doc2Vec(documents, vector_size=100, window=2, min_count=1, workers=4)
 
@@ -167,10 +175,11 @@ doc2vec_df=pd.concat([doc2vec_df,t], axis=1)
 
 doc2vec_df=doc2vec_df.drop('index', axis=1)
 
+#%%
+# =============================================================================
+# K Means Clustering - TFIDF
+# =============================================================================
 
-###############################################################################
-### K Means Clustering - TFIDF
-###############################################################################
 k=8
 km = KMeans(n_clusters=k, random_state =RANDOM_SEED)
 km.fit(TFIDF_matrix)
@@ -182,21 +191,22 @@ Dictionary={'Doc Name':titles, 'Cluster':clusters,  'Text': final_processed_text
 frame=pd.DataFrame(Dictionary, columns=['Cluster', 'Doc Name','Text'])
 
 
-frame=pd.concat([frame,data['category']], axis=1)
+frame=pd.concat([frame,data['labels']], axis=1)
 
 frame['record']=1
 
+#%%
+# =============================================================================
+# Pivot table to see see how clusters compare to categories
+# =============================================================================
 
-###############################################################################
-### Pivot table to see see how clusters compare to categories
-###############################################################################
-pivot=pd.pivot_table(frame, values='record', index='category',
+pivot=pd.pivot_table(frame, values='record', index='labels',
                      columns='Cluster', aggfunc=np.sum)
 
-
-###############################################################################
-### Top Terms per cluster
-###############################################################################
+#%%
+# =============================================================================
+# Top Terms per cluster
+# =============================================================================
 
 print("Top terms per cluster:")
 #sort cluster centers by proximity to centroid
@@ -230,11 +240,11 @@ for i in range(k):
         temp_titles.append(title)
     cluster_title[i]=temp_titles
 
-
-###############################################################################
-### Plotting
-###############################################################################
-
+#%%
+# =============================================================================
+# Plotting
+# =============================================================================
+ 
 # convert two components as we're plotting points in a two-dimensional plane
 # "precomputed" because we provide a distance matrix
 # we will also specify `random_state` so the plot is reproducible.
@@ -288,15 +298,5 @@ for name, group in groups:
 
 ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))      #show legend with only 1 point
 
-
-
 #The following section of code is to run the k-means algorithm on the doc2vec outputs.
 #note the differences in document clusters compared to the TFIDF matrix.
-
-
-
-
-
-
-
-
