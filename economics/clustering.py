@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # =============================================================================
 # 
 # =============================================================================
@@ -39,6 +40,8 @@ os.chdir(r'C:\Users\johnk\Desktop\Grad School\6. Spring 2019\1. MSDS_453_NLP\6. 
 
 RANDOM_SEED=9999
 
+print('Import packages complete ---------------------------------------------')
+
 #%%
 # =============================================================================
 # read train and test dataframe.  Headers are ['category', 'corpus', 'dataset', 'filename', 'text']
@@ -60,8 +63,11 @@ data=pd.concat([pd.DataFrame(labels),pd.DataFrame(text),pd.DataFrame(dataset),
                 pd.DataFrame(title)], axis=1)
 
 #for purpose of demo number of document selected was 1k.    
-data=data.sample(n=10, replace=False, random_state =RANDOM_SEED)
+data=data.sample(n=211, replace=False, random_state =RANDOM_SEED)
 data=data.reset_index()
+
+print('Generate dataframes complete -----------------------------------------')
+
 #%%
 # =============================================================================
 # Function to process documents
@@ -87,6 +93,8 @@ def clean_doc(doc):
     # tokens=[ps.stem(word) for word in tokens]
     return tokens
 
+print('Define preprocssing function complete --------------------------------')
+
 #%%
 # =============================================================================
 # Processing text into lists
@@ -100,6 +108,9 @@ for i in range(0,len(data)):
     temp_text=data['title'].iloc[i]
     titles.append(temp_text)
 
+print('Extract titles complete-----------------------------------------------')
+
+
 #%%
 
 #create empty list to store text documents
@@ -109,6 +120,9 @@ text_body=[]
 for i in range(0,len(data)):
     temp_text=data['text'].iloc[i]
     text_body.append(temp_text)
+    
+print('Extract text complete ------------------------------------------------')
+    
 
 #%%    
 #empty list to store processed documents
@@ -117,6 +131,9 @@ processed_text=[]
 for i in text_body:
     text=clean_doc(i)
     processed_text.append(text)
+
+print('Process & store text complete ----------------------------------------')
+
 
 #Note: the processed_text is the PROCESSED list of documents read directly form 
 #the csv.  Note the list of words is separated by commas.
@@ -135,6 +152,8 @@ for i in processed_text:
 #(1) text_body - unused, (2) processed_text (used in W2V), 
 #(3) final_processed_text (used in TFIDF), and (4) DSI titles (used in TFIDF Matrix)
 
+print('Finalize preprocessing complete --------------------------------------')
+
 #%%
 # =============================================================================
 # Sklearn TFIDF 
@@ -152,6 +171,7 @@ TFIDF_matrix=Tfidf.fit_transform(final_processed_text)
 #creating datafram from TFIDF Matrix
 matrix=pd.DataFrame(TFIDF_matrix.toarray(), columns=Tfidf.get_feature_names(), index=titles)
 
+print('Sklearn TFIDF complete -----------------------------------------------')
 
 #%%
 # =============================================================================
@@ -175,12 +195,15 @@ doc2vec_df=pd.concat([doc2vec_df,t], axis=1)
 
 doc2vec_df=doc2vec_df.drop('index', axis=1)
 
+print('Doc2Vec Complete -----------------------------------------------------')
+
+
 #%%
 # =============================================================================
 # K Means Clustering - TFIDF
 # =============================================================================
 
-k=8
+k=4
 km = KMeans(n_clusters=k, random_state =RANDOM_SEED)
 km.fit(TFIDF_matrix)
 clusters = km.labels_.tolist()
@@ -195,6 +218,9 @@ frame=pd.concat([frame,data['labels']], axis=1)
 
 frame['record']=1
 
+print('Kmeans Clustering Complete -------------------------------------------')
+
+
 #%%
 # =============================================================================
 # Pivot table to see see how clusters compare to categories
@@ -202,6 +228,11 @@ frame['record']=1
 
 pivot=pd.pivot_table(frame, values='record', index='labels',
                      columns='Cluster', aggfunc=np.sum)
+
+print(pivot)
+
+print('Pivot Table complete -------------------------------------------------')
+
 
 #%%
 # =============================================================================
@@ -239,6 +270,8 @@ for i in range(k):
         print(' %s,' % title, end='')
         temp_titles.append(title)
     cluster_title[i]=temp_titles
+
+print('Identify top terms per cluster complete ------------------------------')
 
 #%%
 # =============================================================================
@@ -300,3 +333,6 @@ ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))      #show legend with onl
 
 #The following section of code is to run the k-means algorithm on the doc2vec outputs.
 #note the differences in document clusters compared to the TFIDF matrix.
+
+print('Plot clusters complete -----------------------------------------------')
+print('Full run complete ----------------------------------------------------')
