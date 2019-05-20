@@ -1,0 +1,56 @@
+runfile('C:/Users/johnk/Desktop/Grad School/6. Spring 2019/1. MSDS_453_NLP/6. Homework/week7/economics/clustering.py', wdir='C:/Users/johnk/Desktop/Grad School/6. Spring 2019/1. MSDS_453_NLP/6. Homework/week7/economics')
+Import packages complete ---------------------------------------------
+Generate dataframes complete -----------------------------------------
+Define preprocssing function complete --------------------------------
+Extract titles complete-----------------------------------------------
+Extract text complete ------------------------------------------------
+Process & store text complete ----------------------------------------
+Finalize preprocessing complete --------------------------------------
+Sklearn TFIDF complete -----------------------------------------------
+TF-IDF Kmeans Clustering Complete -------------------------------------------
+Cluster        0     1
+labels                
+economics   14.0  95.0
+random     102.0   NaN
+TF-IDF Pivot Table complete -------------------------------------------------
+Top terms per cluster:
+Cluster 0:
+ citation
+ centermwparseroutput
+ retrieved
+ album
+ article
+ wikipedia
+ itvte
+ district
+ expanding
+ bitcoin
+Cluster 0 titles: List of ,  (album), Francesco Ardissone, Landau–Pomeranchuk–Migdal effect, Henry S. Spalding, Debasement, Xochitl Torres Small, 4-HO-EPT, Kumbhargaon, Ukulele Orchestra of Great Britain, 2018 Connecticut Sun season, Palace of the Dukes of Medinaceli (Cogolludo), List of Senior CLASS Award softball winners, Milow, Germany, George Hotel, Sydney, Aguiar, Paraíba, RE (complexity), None, Andreas Reinke, Ben C. Larkin, Nikolai Kynin, Mazraeh-ye Moradabad, Alborz, None, Diphu railway station, Nobel Memorial Prize in Economic Sciences, Kovačevci (Grad), Mothers' Union,  (film), Azawagh Arabs, Kingsthorpe, Queensland, Teddybears (band), None, Viret, Gymnastics at the 2015 Pan American Games – Women's artistic team all-around, Colubroidea, Martín Bustos Moyano, Exchange, Bernie Morrison, Josephine Balsamo, Alice Gorman, Ersi Sotiropoulos, Cryptocurrency, Dugarwadi waterfall, None, Vernati, The National Council for Renewal and Democracy, Ogaminan, Trestolone, Vijaya Bapineedu, Attilio Palatini, Khiva District, Accounting, Frank Herbert, Compagnie minière de l'Ogooué, Mohammad Yasin (politician), None,  (album), Robert Jones (Michigan politician), Mab Jones, None, Dirk Schachtsiek, List of U.S. military vessels named after living Americans, William Batchelder Greene, Bond, Jerome Powell, Tham Luang cave rescue, Coat of arms of Haiti, Kiviuq (moon), Walter McLaren, Martin Harris (swimmer), Cow Springs Ranch, Murray High School (Utah), Ingeborg Drewitz, Jinka, Irrational exuberance, Insurance, Narsaq massacre, Charles Elmer Hires, James Hamilton, 3rd Earl of Arran, None, Depression, Bill Lapham, Trinity College Dublin Chair of Natural Philosophy, Bitcoin, -class offshore patrol vessel (2017), Charles Juliet, Supply, ieTV, None, David Willetts, Porcupine Tree discography, Oliver Lloyd (MP), Sigma Zeta, Bryson Tiller, None, 2006 Estoril Open, Semyon Alapin, Černá hora (Bohemian Forest), Jan Verheyen (footballer), Mika Borges, Banks, None, E. W. Lampson, Robomodo, 2015 Junior World Fencing Championships, None, Colfax High School (Colfax, California), Equilibrium, Sanie cu zurgălăi, None, Eduard Štorch, Terryville, New York, None, Incomplete (Hoobastank song), Lesley Visser, Marc Romersa,Cluster 1:
+ economic
+ economics
+ market
+ trade
+ price
+ retrieved
+ theory
+ financial
+ countries
+ economy
+Cluster 1 titles: Crowding out (economics), Information asymmetry, Debt of developing countries, Financial market, Competition, Globalization, Invisible hand, Gross domestic product, Federal Reserve Bank, Stagflation, Wealth, Division of labour, Involuntary unemployment, Classical economics, Currency, Austerity, Game theory, Business cycle, Economy, Financial crisis, Debt, Schools of economic thought, Economist, Gini coefficient, Poverty, Capitalism, Adam Smith, Natural capital, Free market, Federal Reserve, Deficit spending, None, Shapiro–Stiglitz theory, Unemployment, Finance, Janet Yellen, OPEC, World Bank, Wealth, Macroeconomics, Joseph Stiglitz, Option (finance), Economic indicator, Externality, Free trade, Austrian School, Monetary policy, Central bank, Central bank, Monopoly, Socialism, Communism, Cash, Mercantilism, Dirigisme, Hyperinflation, Recession, World Trade Organization, Investment, Microeconomics, Social capital, Developed country, Demand, Market (economics), Tax, Real versus nominal value (economics), Price index, Gold standard, Neoclassical economics, Regressive tax, Tariff, Security (finance), Economics, Great Depression, Tax, Chicago school of economics, Purchasing power parity, Nominal rigidity, Government debt, Stock market, Alan Greenspan, Reserve currency, Scarcity, Milton Friedman, Trade, Free market, Human capital, Financial instrument, International Monetary Fund, John Maynard Keynes, Derivative (finance), Balance sheet, Inflation, Ben Bernanke, Paul Krugman,Identify top terms per cluster complete ------------------------------
+TF-IDF | MDS | Plot clusters complete -----------------------------------------------
+TF-IDF | TSNE | Plot clusters complete -----------------------------------------------
+Sklearn TFIDF complete -----------------------------------------------
+Terms - TF-IDF Kmeans Clustering Complete -------------------------------------------
+
+Begin Doc2Vec Work
+
+Number of processor cores: 8
+Doc2Vec Complete -----------------------------------------------------
+Doc2Vec Kmeans Clustering Complete -------------------------------------------
+Cluster     0   1
+labels           
+economics  46  63
+random     42  60
+Doc2Vec Pivot Table complete -------------------------------------------------
+doc2vec | MDS | Plot clusters complete -----------------------------------------------
+Doc2Vec | TSNE | Plot clusters complete -----------------------------------------------
